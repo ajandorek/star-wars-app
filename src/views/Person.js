@@ -1,9 +1,9 @@
-import * as React from "react";
-import { useParams } from "react-router-dom";
+import * as React from 'react';
+import { useParams } from 'react-router-dom';
 
-import { getResident } from "../utils/requests";
+import { getResident } from '../utils/requests';
 
-import { Card, LoadingState } from "../components";
+import { Card, LoadingState } from '../components';
 
 function Person({ selectedResident, setSelectedItem }) {
   const params = useParams();
@@ -17,7 +17,7 @@ function Person({ selectedResident, setSelectedItem }) {
         setLoading(false);
         // When loading route directly, set the resident
         if (!selectedResident) {
-          setSelectedItem("resident", resident);
+          setSelectedItem('resident', resident);
         }
       })
       .catch((error) => {
@@ -33,13 +33,13 @@ function Person({ selectedResident, setSelectedItem }) {
       item={resident}
       header={resident.name}
       values={[
-        "height",
-        "mass",
-        "hair_color",
-        "skin_color",
-        "eye_color",
-        "birth_year",
-        "gender",
+        'height',
+        'mass',
+        'hair_color',
+        'skin_color',
+        'eye_color',
+        'birth_year',
+        'gender',
       ]}
     />
   );

@@ -1,21 +1,21 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   BrowserRouter as Router,
   Route,
   Routes,
   Navigate,
-} from "react-router-dom";
+} from 'react-router-dom';
 
-import Planets from "./views/Planets";
-import Residents from "./views/Residents";
-import Person from "./views/Person";
-import NotFound from "./views/NotFound";
+import Planets from './views/Planets';
+import Residents from './views/Residents';
+import Person from './views/Person';
+import NotFound from './views/NotFound';
 
-import { Header } from "./components";
+import { Header } from './components';
 
-import paths from "./utils/paths";
+import paths from './utils/paths';
 
-import "./App.scss";
+import './App.scss';
 
 const initialItemsState = {
   planet: null,
@@ -41,10 +41,10 @@ function App() {
         updateSelectedItems={updateSelectedItems}
         resetState={() => setSelectedItems(initialItemsState)}
       />
-      <div className="wrapper">
+      <div className='wrapper'>
         <Routes>
-          <Route path="*" element={<NotFound />} />
-          <Route path="/" element={<Navigate replace to="planets" />} />
+          <Route path='*' element={<NotFound />} />
+          <Route path='/' element={<Navigate replace to='planets' />} />
           <Route
             exact
             path={paths.planets}
