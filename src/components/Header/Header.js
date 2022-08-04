@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { matchPath } from 'react-router-dom';
+import { matchPath, useLocation } from 'react-router-dom';
 
 import Breadcrumb from '../Breadcrumb';
 
@@ -11,12 +11,39 @@ import { Chevron, HeaderLoadingDots } from '../../assets/Icons';
 
 import './Header.scss';
 
+const initialBreadcrumbState = {
+  planets: true,
+  residents: false,
+  person: false,
+};
+
 function Header({ selectedItems, updateSelectedItems, resetState }) {
+  const location = useLocation();
   const [loading, setLoading] = React.useState(false);
+  const [breadcrumbs, setBreadcrumbs] = React.useState(initialBreadcrumbState);
   const { planet, resident } = selectedItems;
 
   // check which path we are on to handle disabling breadcrumb
   const getPathObject = (path) => matchPath({ path }, window.location.pathname);
+
+  // Update breadcrumb on navigation
+  React.useEffect(() => {
+    if (getPathObject(paths.residents)) {
+      setBreadcrumbs((prevState) => ({
+        ...prevState,
+        residents: true,
+        person: false,
+      }));
+    } else if (getPathObject(paths.person)) {
+      setBreadcrumbs((prevState) => ({
+        ...prevState,
+        residents: true,
+        person: true,
+      }));
+    } else {
+      setBreadcrumbs(initialBreadcrumbState);
+    }
+  }, [location]);
 
   // Hook to handle getting the full breadcrumb trail if navigating directly to deeply nested URL
   React.useEffect(() => {
@@ -33,7 +60,11 @@ function Header({ selectedItems, updateSelectedItems, resetState }) {
   return (
     <div className='header'>
       {loading ? (
-        <img src={HeaderLoadingDots} alt='header loading animation' className='headerLoader'/>
+        <img
+          src={HeaderLoadingDots}
+          alt='header loading animation'
+          className='headerLoader'
+        />
       ) : (
         <>
           <Breadcrumb
@@ -42,7 +73,7 @@ function Header({ selectedItems, updateSelectedItems, resetState }) {
             handleClick={resetState}
             value='Planets'
           />
-          {planet && (
+          {breadcrumbs.residents && planet && (
             <>
               <img src={Chevron} alt='chevron' className='headerChevron' />
               <Breadcrumb
@@ -53,7 +84,7 @@ function Header({ selectedItems, updateSelectedItems, resetState }) {
               />
             </>
           )}
-          {resident && (
+          {breadcrumbs.person && resident && (
             <>
               <img src={Chevron} alt='chevron' className='headerChevron' />
               <div>{resident.name}</div>
