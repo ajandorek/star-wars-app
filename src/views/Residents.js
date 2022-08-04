@@ -18,10 +18,7 @@ function Residents({ planet, setSelectedItem }) {
         if (!planet) {
           const planetObj = await getPlanet(params.id);
           setSelectedItem('planet', planetObj);
-        }
-
-        // check if we have planet before proceeding
-        if (planet) {
+        } else {
           const residents = await getPlanetResidents(planet.residents);
           setResidents(residents);
           setLoading(false);
