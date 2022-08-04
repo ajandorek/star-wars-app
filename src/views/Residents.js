@@ -11,22 +11,32 @@ function Residents({ planet, setSelectedItem }) {
   const [loading, setLoading] = React.useState(true);
   const [residents, setResidents] = React.useState([]);
 
-  React.useEffect(() => {
-    // Get planet info to render title and breadcrumb if not found
-    if (!planet) {
-      getPlanet(params.id).then((planet) => setSelectedItem('planet', planet));
-    }
+  const residentsRequest = React.useCallback(
+    async (planet) => {
+      try {
+        // Get planet info to render title and breadcrumb if not found
+        if (!planet) {
+          const planetObj = await getPlanet(params.id);
+          setSelectedItem('planet', planetObj);
+        }
 
-    getPlanetResidents(params.id, planet)
-      .then((residents) => {
-        setResidents(residents);
-        setLoading(false);
-      })
-      .catch((error) => {
+        // check if we have planet before proceeding
+        if (planet) {
+          const residents = await getPlanetResidents(planet.residents);
+          setResidents(residents);
+          setLoading(false);
+        }
+      } catch (error) {
         console.error(error);
         throw new Error(error);
-      });
-  }, [setLoading, params.id, planet, setSelectedItem]);
+      }
+    },
+    [params.id, setSelectedItem]
+  );
+
+  React.useEffect(() => {
+    residentsRequest(planet);
+  }, [residentsRequest, planet]);
 
   return (
     <>

@@ -45,14 +45,10 @@ export async function getAllPlanets(url = `${API_URL}/planets`) {
   }
 }
 
-export async function getPlanetResidents(id, planet) {
+export async function getPlanetResidents(residentsUrls) {
   try {
-    // Use existing planet if present to avoid API request
-    const planetJson = planet || (await getPlanet(id));
-    
-    // request all residents for a given planet
     const residents = await Promise.allSettled(
-      planetJson.residents.map(async (url) => await getRequest(url))
+      residentsUrls.map(async (url) => await getRequest(url))
     );
 
     // filter out rejected residents
